@@ -40,3 +40,7 @@ https://chromium.googlesource.com/crashpad/crashpad.
    perform automated builds and tests.
  * [crashpad-dev](https://groups.google.com/a/chromium.org/group/crashpad-dev)
    is the Crashpad developers’ mailing list.
+
+## About This Fork
+
+The information about this fork can be found in [README.fork.md](README.fork.md).
