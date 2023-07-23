@@ -8,8 +8,11 @@ add_library(crashpad_client STATIC
     crashpad_client.h
     crashpad_info.cc
     crashpad_info.h
+    length_delimited_ring_buffer.h
     prune_crash_reports.cc
     prune_crash_reports.h
+    ring_buffer_annotation.h
+    ring_buffer_annotation_load_test_main.cc
     settings.cc
     settings.h
     simple_address_range_bag.h
@@ -32,9 +35,14 @@ if(IOS)
         crashpad_client_ios.cc
         ios_handler/exception_processor.h
         ios_handler/exception_processor.mm
+        ios_handler/in_process_handler.cc
+        ios_handler/in_process_handler.h
         ios_handler/in_process_intermediate_dump_handler.cc
         ios_handler/in_process_intermediate_dump_handler.h
+        ios_handler/prune_intermediate_dumps_and_crash_reports_thread.cc
+        ios_handler/prune_intermediate_dumps_and_crash_reports_thread.h
         simulate_crash_ios.h
+        upload_behavior_ios.h
     )
 endif()
 

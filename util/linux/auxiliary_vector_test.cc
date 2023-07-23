@@ -1,4 +1,4 @@
-// Copyright 2017 The Crashpad Authors. All rights reserved.
+// Copyright 2017 The Crashpad Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@
 #include <limits>
 
 #include "base/bit_cast.h"
-#include "base/macros.h"
 #include "build/build_config.h"
 #include "gtest/gtest.h"
 #include "test/errors.h"
@@ -34,7 +33,7 @@
 #include "util/numeric/int128.h"
 #include "util/process/process_memory_linux.h"
 
-#if !defined(OS_ANDROID)
+#if !BUILDFLAG(IS_ANDROID)
 // TODO(jperaza): This symbol isn't defined when building in chromium for
 // Android. There may be another symbol to use.
 extern "C" {
@@ -73,7 +72,7 @@ void TestAgainstCloneOrSelf(pid_t pid) {
   ASSERT_TRUE(aux.GetValue(AT_BASE, &interp_base));
   EXPECT_TRUE(mappings.FindMapping(interp_base));
 
-#if !defined(OS_ANDROID)
+#if !BUILDFLAG(IS_ANDROID)
   LinuxVMAddress entry_addr;
   ASSERT_TRUE(aux.GetValue(AT_ENTRY, &entry_addr));
   EXPECT_EQ(entry_addr, FromPointerCast<LinuxVMAddress>(START_SYMBOL));
@@ -97,10 +96,15 @@ void TestAgainstCloneOrSelf(pid_t pid) {
 
   ProcessMemoryLinux memory(&connection);
 
+// AT_PLATFORM is null for RISC-V:
+// https://elixir.bootlin.com/linux/v6.4-rc4/C/ident/ELF_PLATFORM
+#if !defined(ARCH_CPU_RISCV64)
   LinuxVMAddress platform_addr;
   ASSERT_TRUE(aux.GetValue(AT_PLATFORM, &platform_addr));
   std::string platform;
   ASSERT_TRUE(memory.ReadCStringSizeLimited(platform_addr, 10, &platform));
+#endif  // ARCH_CPU_RISCV64
+
 #if defined(ARCH_CPU_X86)
   EXPECT_STREQ(platform.c_str(), "i686");
 #elif defined(ARCH_CPU_X86_64)
@@ -151,14 +155,16 @@ TEST(AuxiliaryVector, ReadSelf) {
 class ReadChildTest : public Multiprocess {
  public:
   ReadChildTest() : Multiprocess() {}
+
+  ReadChildTest(const ReadChildTest&) = delete;
+  ReadChildTest& operator=(const ReadChildTest&) = delete;
+
   ~ReadChildTest() {}
 
  private:
   void MultiprocessParent() override { TestAgainstCloneOrSelf(ChildPID()); }
 
   void MultiprocessChild() override { CheckedReadFileAtEOF(ReadPipeHandle()); }
-
-  DISALLOW_COPY_AND_ASSIGN(ReadChildTest);
 };
 
 TEST(AuxiliaryVector, ReadChild) {

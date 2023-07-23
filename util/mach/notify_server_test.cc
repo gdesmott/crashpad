@@ -1,4 +1,4 @@
-// Copyright 2014 The Crashpad Authors. All rights reserved.
+// Copyright 2014 The Crashpad Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -163,6 +163,9 @@ mach_port_urefs_t DeadNameRightRefCount(mach_port_t port) {
 class NotifyServerTestBase : public testing::Test,
                              public NotifyServer::Interface {
  public:
+  NotifyServerTestBase(const NotifyServerTestBase&) = delete;
+  NotifyServerTestBase& operator=(const NotifyServerTestBase&) = delete;
+
   // NotifyServer::Interface:
 
   MOCK_METHOD(kern_return_t,
@@ -282,8 +285,6 @@ class NotifyServerTestBase : public testing::Test,
 
  private:
   base::mac::ScopedMachReceiveRight server_port_;
-
-  DISALLOW_COPY_AND_ASSIGN(NotifyServerTestBase);
 };
 
 using NotifyServerTest = StrictMock<NotifyServerTestBase>;

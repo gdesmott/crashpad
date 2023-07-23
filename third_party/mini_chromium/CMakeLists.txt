@@ -26,7 +26,6 @@ mc_append_sources(
     format_macros.h
     logging.cc
     logging.h
-    macros.h
     memory/free_deleter.h
     memory/page_size.h
     memory/scoped_policy.h
@@ -76,6 +75,7 @@ mc_append_sources(
 
 if(APPLE AND NOT IOS)
     mc_append_sources(
+        apple/bridging.h
         mac/close_nocancel.cc
         mac/foundation_util.h
         mac/foundation_util.mm
@@ -90,7 +90,6 @@ if(APPLE AND NOT IOS)
         mac/scoped_mach_vm.h
         mac/scoped_nsautorelease_pool.h
         mac/scoped_nsautorelease_pool.mm
-        mac/scoped_nsobject.h
         mac/scoped_typeref.h
         strings/sys_string_conversions_mac.mm
     )
@@ -107,7 +106,6 @@ elseif(IOS)
         mac/scoped_mach_vm.h
         mac/scoped_nsautorelease_pool.h
         mac/scoped_nsautorelease_pool.mm
-        mac/scoped_nsobject.h
         mac/scoped_typeref.h
         strings/sys_string_conversions_mac.mm
     )
@@ -169,6 +167,8 @@ target_link_libraries(mini_chromium
     PRIVATE
         $<BUILD_INTERFACE:crashpad_interface>
 )
+
+target_compile_features(mini_chromium PUBLIC cxx_std_17)
 
 if(WIN32)
     target_link_libraries(mini_chromium PRIVATE advapi32 kernel32)

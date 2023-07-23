@@ -31,6 +31,12 @@ if(LINUX OR ANDROID)
     endif()
 endif()
 
+if (NOT (ANDROID OR FUCHSIA))
+    add_compile_definitions(CRASHPAD_FLOCK_ALWAYS_SUPPORTED=1)
+else()
+    add_compile_definitions(CRASHPAD_FLOCK_ALWAYS_SUPPORTED=0)
+endif()
+
 include(GNUInstallDirs)
 set(CMAKE_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/crashpad")
 
@@ -66,6 +72,10 @@ target_include_directories(crashpad_interface INTERFACE
 target_compile_definitions(crashpad_interface INTERFACE
     CRASHPAD_LSS_SOURCE_EMBEDDED
 )
+
+if(APPLE)
+     add_compile_options("-fobjc-arc")
+endif()
 
 if(MSVC)
     target_compile_definitions(crashpad_interface INTERFACE

@@ -36,6 +36,19 @@ if(CRASHPAD_BUILD_TOOLS)
     )
     crashpad_install_target(crashpad_http_upload)
 
+    add_executable(dump_minidump_annotations
+        dump_minidump_annotations.cc
+    )
+    target_link_libraries(dump_minidump_annotations PRIVATE
+        crashpad_client
+        crashpad_compat
+        crashpad_getopt
+        crashpad_tools
+        crashpad_zlib
+        mini_chromium
+    )
+    crashpad_install_target(dump_minidump_annotations)
+
     add_executable(crashpad_generate_dump
         generate_dump.cc
     )

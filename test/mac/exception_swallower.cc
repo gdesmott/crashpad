@@ -1,4 +1,4 @@
-// Copyright 2017 The Crashpad Authors. All rights reserved.
+// Copyright 2017 The Crashpad Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -66,6 +66,9 @@ class ExceptionSwallower::ExceptionSwallowerThread
     Start();
   }
 
+  ExceptionSwallowerThread(const ExceptionSwallowerThread&) = delete;
+  ExceptionSwallowerThread& operator=(const ExceptionSwallowerThread&) = delete;
+
   ~ExceptionSwallowerThread() override {}
 
   void Stop() { exception_handler_server_.Stop(); }
@@ -107,8 +110,6 @@ class ExceptionSwallower::ExceptionSwallowerThread
 
   ExceptionHandlerServer exception_handler_server_;
   pid_t pid_;
-
-  DISALLOW_COPY_AND_ASSIGN(ExceptionSwallowerThread);
 };
 
 ExceptionSwallower::ExceptionSwallower() : exception_swallower_thread_() {

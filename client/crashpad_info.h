@@ -1,4 +1,4 @@
-// Copyright 2014 The Crashpad Authors. All rights reserved.
+// Copyright 2014 The Crashpad Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,22 +17,21 @@
 
 #include <stdint.h>
 
-#include "base/macros.h"
 #include "build/build_config.h"
 #include "client/annotation_list.h"
 #include "client/simple_address_range_bag.h"
 #include "client/simple_string_dictionary.h"
 #include "util/misc/tri_state.h"
 
-#if defined(OS_WIN)
+#if BUILDFLAG(IS_WIN)
 #include <windows.h>
-#endif  // OS_WIN
+#endif  // BUILDFLAG(IS_WIN)
 
 namespace crashpad {
 
 namespace internal {
 
-#if defined(OS_IOS)
+#if BUILDFLAG(IS_IOS)
 class InProcessIntermediateDumpHandler;
 #endif
 
@@ -70,6 +69,9 @@ struct CrashpadInfo {
   static CrashpadInfo* GetCrashpadInfo();
 
   CrashpadInfo();
+
+  CrashpadInfo(const CrashpadInfo&) = delete;
+  CrashpadInfo& operator=(const CrashpadInfo&) = delete;
 
   //! \brief Sets the bag of extra memory ranges to be included in the snapshot.
   //!
@@ -228,7 +230,7 @@ struct CrashpadInfo {
   };
 
  protected:
-#if defined(OS_IOS)
+#if BUILDFLAG(IS_IOS)
   friend class internal::InProcessIntermediateDumpHandler;
 #endif
 
@@ -270,8 +272,6 @@ struct CrashpadInfo {
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
-
-  DISALLOW_COPY_AND_ASSIGN(CrashpadInfo);
 };
 
 }  // namespace crashpad

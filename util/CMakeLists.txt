@@ -21,6 +21,7 @@ add_library(crashpad_util STATIC
     file/string_file.h
     misc/address_sanitizer.h
     misc/address_types.h
+    misc/arm64_pac_bti.S
     misc/arraysize.h
     misc/as_underlying_type.h
     misc/capture_context.h
@@ -104,6 +105,7 @@ add_library(crashpad_util STATIC
     stream/zlib_output_stream.h
     string/split_string.cc
     string/split_string.h
+    synchronization/scoped_spin_guard.h
     synchronization/semaphore.h
     thread/stoppable.h
     thread/thread.cc
@@ -128,12 +130,12 @@ if(NOT WIN32)
         posix/scoped_mmap.h
         posix/signals.cc
         posix/signals.h
+        posix/spawn_subprocess.cc
+        posix/spawn_subprocess.h
         synchronization/semaphore_posix.cc
         thread/thread_posix.cc
         posix/close_multiple.cc
         posix/close_multiple.h
-        posix/double_fork_and_exec.cc
-        posix/double_fork_and_exec.h
         posix/drop_privileges.cc
         posix/drop_privileges.h
         posix/process_info.h
@@ -205,6 +207,8 @@ if(APPLE)
             ios/ios_intermediate_dump_data.cc
             ios/ios_intermediate_dump_data.h
             ios/ios_intermediate_dump_format.h
+            ios/ios_intermediate_dump_interface.cc
+            ios/ios_intermediate_dump_interface.h
             ios/ios_intermediate_dump_list.cc
             ios/ios_intermediate_dump_list.h
             ios/ios_intermediate_dump_map.cc
@@ -219,6 +223,10 @@ if(APPLE)
             ios/ios_system_data_collector.mm
             ios/raw_logging.cc
             ios/raw_logging.h
+            ios/scoped_background_task.h
+            ios/scoped_background_task.mm
+            ios/scoped_vm_map.cc
+            ios/scoped_vm_map.h
             ios/scoped_vm_read.cc
             ios/scoped_vm_read.h
     )
@@ -248,6 +256,8 @@ if(LINUX OR ANDROID)
         linux/exception_information.h
         linux/memory_map.cc
         linux/memory_map.h
+        linux/pac_helper.cc
+        linux/pac_helper.h
         linux/proc_stat_reader.cc
         linux/proc_stat_reader.h
         linux/proc_task_reader.cc
@@ -301,6 +311,7 @@ if(WIN32)
         win/context_wrappers.h
         win/critical_section_with_debug_info.cc
         win/critical_section_with_debug_info.h
+        win/exception_codes.h
         win/exception_handler_server.cc
         win/exception_handler_server.h
         win/get_function.cc
@@ -324,6 +335,7 @@ if(WIN32)
         win/process_structs.h
         win/registration_protocol_win.cc
         win/registration_protocol_win.h
+        win/registration_protocol_win_structs.h
         win/safe_terminate_process.h
         win/scoped_handle.cc
         win/scoped_handle.h
